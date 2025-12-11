@@ -1,0 +1,919 @@
+{
+	"info": {
+		"_postman_id": "5cc8afe3-17f5-4063-8eb2-dc997a3a1332",
+		"name": "Project - Spotify_Playlist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29529721"
+	},
+	"item": [
+		{
+			"name": "Auth2.0_Setup",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "user-read-private user-read-email playlist-read-private playlist-modify-private playlist-modify-public",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "502f3d92bfb24ea1a5368768c7896396",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "318b04bc6f69432c888a586c01a09743",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "https://accounts.spotify.com/api/token",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "https://accounts.spotify.com/authorize",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauth.pstmn.io/v1/browser-callback",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "SpotifyToken",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GET Current User Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Verify Email\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.email).to.eql(\"itsrutvik09@gmail.com\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/me",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_All_Playlist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"     \"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"href\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"limit\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"next\": {\r",
+							"      \"type\": \"null\"\r",
+							"    },\r",
+							"    \"offset\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"previous\": {\r",
+							"      \"type\": \"null\"\r",
+							"    },\r",
+							"    \"total\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"items\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": \"object\",\r",
+							"          \"properties\": {\r",
+							"            \"collaborative\": {\r",
+							"              \"type\": \"boolean\"\r",
+							"            },\r",
+							"            \"description\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"external_urls\": {\r",
+							"              \"type\": \"object\",\r",
+							"              \"properties\": {\r",
+							"                \"spotify\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                }\r",
+							"              },\r",
+							"              \"required\": [\r",
+							"                \"spotify\"\r",
+							"              ]\r",
+							"            },\r",
+							"            \"href\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"id\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"images\": {\r",
+							"              \"type\": \"null\"\r",
+							"            },\r",
+							"            \"name\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"owner\": {\r",
+							"              \"type\": \"object\",\r",
+							"              \"properties\": {\r",
+							"                \"display_name\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"external_urls\": {\r",
+							"                  \"type\": \"object\",\r",
+							"                  \"properties\": {\r",
+							"                    \"spotify\": {\r",
+							"                      \"type\": \"string\"\r",
+							"                    }\r",
+							"                  },\r",
+							"                  \"required\": [\r",
+							"                    \"spotify\"\r",
+							"                  ]\r",
+							"                },\r",
+							"                \"href\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"id\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"type\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"uri\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                }\r",
+							"              },\r",
+							"              \"required\": [\r",
+							"                \"display_name\",\r",
+							"                \"external_urls\",\r",
+							"                \"href\",\r",
+							"                \"id\",\r",
+							"                \"type\",\r",
+							"                \"uri\"\r",
+							"              ]\r",
+							"            },\r",
+							"            \"primary_color\": {\r",
+							"              \"type\": \"null\"\r",
+							"            },\r",
+							"            \"public\": {\r",
+							"              \"type\": \"boolean\"\r",
+							"            },\r",
+							"            \"snapshot_id\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"tracks\": {\r",
+							"              \"type\": \"object\",\r",
+							"              \"properties\": {\r",
+							"                \"href\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"total\": {\r",
+							"                  \"type\": \"integer\"\r",
+							"                }\r",
+							"              },\r",
+							"              \"required\": [\r",
+							"                \"href\",\r",
+							"                \"total\"\r",
+							"              ]\r",
+							"            },\r",
+							"            \"type\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"uri\": {\r",
+							"              \"type\": \"string\"\r",
+							"            }\r",
+							"          },\r",
+							"          \"required\": [\r",
+							"            \"collaborative\",\r",
+							"            \"description\",\r",
+							"            \"external_urls\",\r",
+							"            \"href\",\r",
+							"            \"id\",\r",
+							"            \"images\",\r",
+							"            \"name\",\r",
+							"            \"owner\",\r",
+							"            \"primary_color\",\r",
+							"            \"public\",\r",
+							"            \"snapshot_id\",\r",
+							"            \"tracks\",\r",
+							"            \"type\",\r",
+							"            \"uri\"\r",
+							"          ]\r",
+							"        },\r",
+							"        {\r",
+							"          \"type\": \"object\",\r",
+							"          \"properties\": {\r",
+							"            \"collaborative\": {\r",
+							"              \"type\": \"boolean\"\r",
+							"            },\r",
+							"            \"description\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"external_urls\": {\r",
+							"              \"type\": \"object\",\r",
+							"              \"properties\": {\r",
+							"                \"spotify\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                }\r",
+							"              },\r",
+							"              \"required\": [\r",
+							"                \"spotify\"\r",
+							"              ]\r",
+							"            },\r",
+							"            \"href\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"id\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"images\": {\r",
+							"              \"type\": \"null\"\r",
+							"            },\r",
+							"            \"name\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"owner\": {\r",
+							"              \"type\": \"object\",\r",
+							"              \"properties\": {\r",
+							"                \"display_name\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"external_urls\": {\r",
+							"                  \"type\": \"object\",\r",
+							"                  \"properties\": {\r",
+							"                    \"spotify\": {\r",
+							"                      \"type\": \"string\"\r",
+							"                    }\r",
+							"                  },\r",
+							"                  \"required\": [\r",
+							"                    \"spotify\"\r",
+							"                  ]\r",
+							"                },\r",
+							"                \"href\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"id\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"type\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"uri\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                }\r",
+							"              },\r",
+							"              \"required\": [\r",
+							"                \"display_name\",\r",
+							"                \"external_urls\",\r",
+							"                \"href\",\r",
+							"                \"id\",\r",
+							"                \"type\",\r",
+							"                \"uri\"\r",
+							"              ]\r",
+							"            },\r",
+							"            \"primary_color\": {\r",
+							"              \"type\": \"null\"\r",
+							"            },\r",
+							"            \"public\": {\r",
+							"              \"type\": \"boolean\"\r",
+							"            },\r",
+							"            \"snapshot_id\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"tracks\": {\r",
+							"              \"type\": \"object\",\r",
+							"              \"properties\": {\r",
+							"                \"href\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"total\": {\r",
+							"                  \"type\": \"integer\"\r",
+							"                }\r",
+							"              },\r",
+							"              \"required\": [\r",
+							"                \"href\",\r",
+							"                \"total\"\r",
+							"              ]\r",
+							"            },\r",
+							"            \"type\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"uri\": {\r",
+							"              \"type\": \"string\"\r",
+							"            }\r",
+							"          },\r",
+							"          \"required\": [\r",
+							"            \"collaborative\",\r",
+							"            \"description\",\r",
+							"            \"external_urls\",\r",
+							"            \"href\",\r",
+							"            \"id\",\r",
+							"            \"images\",\r",
+							"            \"name\",\r",
+							"            \"owner\",\r",
+							"            \"primary_color\",\r",
+							"            \"public\",\r",
+							"            \"snapshot_id\",\r",
+							"            \"tracks\",\r",
+							"            \"type\",\r",
+							"            \"uri\"\r",
+							"          ]\r",
+							"        },\r",
+							"        {\r",
+							"          \"type\": \"object\",\r",
+							"          \"properties\": {\r",
+							"            \"collaborative\": {\r",
+							"              \"type\": \"boolean\"\r",
+							"            },\r",
+							"            \"description\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"external_urls\": {\r",
+							"              \"type\": \"object\",\r",
+							"              \"properties\": {\r",
+							"                \"spotify\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                }\r",
+							"              },\r",
+							"              \"required\": [\r",
+							"                \"spotify\"\r",
+							"              ]\r",
+							"            },\r",
+							"            \"href\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"id\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"images\": {\r",
+							"              \"type\": \"null\"\r",
+							"            },\r",
+							"            \"name\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"owner\": {\r",
+							"              \"type\": \"object\",\r",
+							"              \"properties\": {\r",
+							"                \"display_name\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"external_urls\": {\r",
+							"                  \"type\": \"object\",\r",
+							"                  \"properties\": {\r",
+							"                    \"spotify\": {\r",
+							"                      \"type\": \"string\"\r",
+							"                    }\r",
+							"                  },\r",
+							"                  \"required\": [\r",
+							"                    \"spotify\"\r",
+							"                  ]\r",
+							"                },\r",
+							"                \"href\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"id\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"type\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"uri\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                }\r",
+							"              },\r",
+							"              \"required\": [\r",
+							"                \"display_name\",\r",
+							"                \"external_urls\",\r",
+							"                \"href\",\r",
+							"                \"id\",\r",
+							"                \"type\",\r",
+							"                \"uri\"\r",
+							"              ]\r",
+							"            },\r",
+							"            \"primary_color\": {\r",
+							"              \"type\": \"null\"\r",
+							"            },\r",
+							"            \"public\": {\r",
+							"              \"type\": \"boolean\"\r",
+							"            },\r",
+							"            \"snapshot_id\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"tracks\": {\r",
+							"              \"type\": \"object\",\r",
+							"              \"properties\": {\r",
+							"                \"href\": {\r",
+							"                  \"type\": \"string\"\r",
+							"                },\r",
+							"                \"total\": {\r",
+							"                  \"type\": \"integer\"\r",
+							"                }\r",
+							"              },\r",
+							"              \"required\": [\r",
+							"                \"href\",\r",
+							"                \"total\"\r",
+							"              ]\r",
+							"            },\r",
+							"            \"type\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"uri\": {\r",
+							"              \"type\": \"string\"\r",
+							"            }\r",
+							"          },\r",
+							"          \"required\": [\r",
+							"            \"collaborative\",\r",
+							"            \"description\",\r",
+							"            \"external_urls\",\r",
+							"            \"href\",\r",
+							"            \"id\",\r",
+							"            \"images\",\r",
+							"            \"name\",\r",
+							"            \"owner\",\r",
+							"            \"primary_color\",\r",
+							"            \"public\",\r",
+							"            \"snapshot_id\",\r",
+							"            \"tracks\",\r",
+							"            \"type\",\r",
+							"            \"uri\"\r",
+							"          ]\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"href\",\r",
+							"    \"limit\",\r",
+							"    \"next\",\r",
+							"    \"offset\",\r",
+							"    \"previous\",\r",
+							"    \"total\",\r",
+							"    \"items\"\r",
+							"  ]\r",
+							"};\r",
+							"\r",
+							"var actualJasonData = pm.response.json();\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    pm.expect(tv4.validate(actualJasonData, schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/me/playlists",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"me",
+						"playlists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_Specific_Playlist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Verify ID\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.eql(\"6Xv0xYr20XdWPbYBVUn3Yz\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "BQBmbIHa3vakev-0kpLX3I5yyP8scAAhGoMc0IZSWz16Eek_I5M5Q5aeh9LjPNtmYEMUNvLQYvMugzS1p7rctE8thX8H1YyiT--HoYPYybcgTxJIBkf6X7nPRqGBgVZLuqxSLMnbZYjvskU_VY-tHWFYmQVT0YgQNpm2qz7TaBWBoRE0u13VsxBBoK5ZEq3NkeUpbR5vPrry-_huzGwVHSgz9HxBwUQVGVkPDTM08DRvrKoHG7m07X6rEObNDAg6nAx0SNNvPLKiAe11Jq3TihGZ5776V5tvYK69aQqnJVaBlTupaHQTM7rpok2mAERXozxHH2spcEs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/playlists/3yPgI8BOkMBLraj8nuru8C",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"playlists",
+						"3yPgI8BOkMBLraj8nuru8C"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create_Playlist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    console.log(\"Playlist Created\")\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Created #01\",\r\n    \"description\" : \"Created using Postman\",\r\n    \"public\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BsicURL}}",
+					"host": [
+						"{{BsicURL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create_Playlist_#2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    console.log(\"Playlist Created\")\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Created #02\",\r\n    \"description\" : \"Created using Postman\",\r\n    \"public\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BsicURL}}",
+					"host": [
+						"{{BsicURL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update_Playlist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Playlist Updted\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"Updated #02\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Updated #02\",\r\n    \"description\" : \"Updated using Postman\",\r\n    \"public\": true\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.spotify.com/v1/playlists/3wXPd4TGSucHKvMdt10DfP",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"playlists",
+						"3wXPd4TGSucHKvMdt10DfP"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add_Track",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    console.log(\"Track added to playlist\")\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "BQBmbIHa3vakev-0kpLX3I5yyP8scAAhGoMc0IZSWz16Eek_I5M5Q5aeh9LjPNtmYEMUNvLQYvMugzS1p7rctE8thX8H1YyiT--HoYPYybcgTxJIBkf6X7nPRqGBgVZLuqxSLMnbZYjvskU_VY-tHWFYmQVT0YgQNpm2qz7TaBWBoRE0u13VsxBBoK5ZEq3NkeUpbR5vPrry-_huzGwVHSgz9HxBwUQVGVkPDTM08DRvrKoHG7m07X6rEObNDAg6nAx0SNNvPLKiAe11Jq3TihGZ5776V5tvYK69aQqnJVaBlTupaHQTM7rpok2mAERXozxHH2spcEs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"uris\": [\"spotify:track:4nOygULhEuDO5ZBRNPFaso\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.spotify.com/v1/playlists/3yPgI8BOkMBLraj8nuru8C/tracks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"playlists",
+						"3yPgI8BOkMBLraj8nuru8C",
+						"tracks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove_Track",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "BQBmbIHa3vakev-0kpLX3I5yyP8scAAhGoMc0IZSWz16Eek_I5M5Q5aeh9LjPNtmYEMUNvLQYvMugzS1p7rctE8thX8H1YyiT--HoYPYybcgTxJIBkf6X7nPRqGBgVZLuqxSLMnbZYjvskU_VY-tHWFYmQVT0YgQNpm2qz7TaBWBoRE0u13VsxBBoK5ZEq3NkeUpbR5vPrry-_huzGwVHSgz9HxBwUQVGVkPDTM08DRvrKoHG7m07X6rEObNDAg6nAx0SNNvPLKiAe11Jq3TihGZ5776V5tvYK69aQqnJVaBlTupaHQTM7rpok2mAERXozxHH2spcEs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tracks\": [\r\n        {\r\n            \"uri\": \"spotify:track:4nOygULhEuDO5ZBRNPFaso\"\r\n        }\r\n    ],\r\n    \"snapshot_id\": \"AAAAAtSGJz/VCyYy7JI2+ZetvKTVK3BZ\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.spotify.com/v1/playlists/3yPgI8BOkMBLraj8nuru8C/tracks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"playlists",
+						"3yPgI8BOkMBLraj8nuru8C",
+						"tracks"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "AccessToken",
+			"value": ""
+		},
+		{
+			"key": "PlaylistID",
+			"value": ""
+		},
+		{
+			"key": "BsicURL",
+			"value": ""
+		},
+		{
+			"key": "TrackURL",
+			"value": ""
+		}
+	]
+}
